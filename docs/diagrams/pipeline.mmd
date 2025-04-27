@@ -1,0 +1,40 @@
+flowchart TD
+  A("User Question (Natural Language)") --> B("Preprocessing")
+  B --> B1("Tokenization")
+  B --> B2("Named Entity Recognition (NER)")
+  B --> B3("Parsing for Logical Cues")
+  B --> B4("Optional: Question Categorization")
+
+  B --> C("Fine-Tuned LLM (HuggingFaceH4/zephyr-7b-beta)")
+  C --> C1("Convert NL to First-Order Logic")
+
+  C1 --> D("Z3 Symbolic Reasoning")
+  D --> D1("Validate Rules")
+  D --> D2("Derive Answer (Yes/No/Conditional)")
+  D --> D3("Check for Contradictions")
+
+  D --> E("Explainable AI Module")
+  E --> E1("Generate Explanation")
+  E --> E2("Cite Relevant Rules")
+
+  E --> F("API Deployment with FastAPI")
+  F --> F1("Input: JSON Question")
+  F --> F2("Output: Answer, Explanation, Citation")
+
+  F --> G("Evaluation Module")
+  G --> G1("Compare Base vs Fine-Tuned + Z3")
+  G --> G2("Metrics: Accuracy, Rule Match, Explanation Quality")
+
+  subgraph Tools
+    T1("Transformers")
+    T2("Z3 Solver")
+    T3("LoRA")
+    T4("FastAPI")
+    T5("PyTorch")
+  end
+
+  T1 --> C
+  T2 --> D
+  T3 --> C
+  T4 --> F
+  T5 --> C
