@@ -3,3 +3,10 @@ peft
 datasets
 accelerate
 bitsandbytes
+fastapi
+uvicorn
+pydantic
+boto
+lark
+z3-solver
+torch
