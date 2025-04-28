@@ -19,7 +19,7 @@ api_key_header = APIKeyHeader(name="Authorization", auto_error=False)
 
 # === Request and Response Models ===
 class InputRequest(BaseModel):
-    premises_NL: List[str]
+    premises: List[str]
     questions: List[str]
 
 class OutputResponse(BaseModel):
@@ -36,20 +36,27 @@ def query(input_request: InputRequest, authorization: str = Depends(api_key_head
     if authorization != f"Bearer {API_KEY}":
         raise HTTPException(status_code=401, detail="Invalid API Key.")
 
-    # Step 1: Translate NL to FOL
-    premises_fol = translate_premises_to_fol(input_request.premises_NL)
+    # Step 1: Validate input
+    if not input_request.premises or not input_request.questions:
+        raise HTTPException(status_code=400, detail="Both 'premises' and 'questions' must be provided and non-empty.")
+
+    # Step 2: Logging
+    print("Incoming request:")
+    print(f"Premises: {input_request.premises}")
+    print(f"Questions: {input_request.questions}")
+    print(f"Authorization: {authorization}")
+
+    # Step 3: Translate NL to FOL
+    premises_fol = translate_premises_to_fol(input_request.premises)
     questions_fol = translate_questions_to_fol(input_request.questions)
 
-    answers = []
-    idx_list = []
-    explanations = []
-
-    # Step 2: Verify with Z3
     result = verify_with_z3(premises_fol, questions_fol)
     answers = result[0]
     idx_list = result[1]
-    
-    # Step 3: Return result
+
+    explanations = ["Explanation not available yet." for _ in input_request.questions]
+
+    # Step 4: Return result
     return OutputResponse(
         answers=answers,
         idx=idx_list,
