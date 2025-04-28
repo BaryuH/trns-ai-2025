@@ -7,10 +7,7 @@ from typing import List
 from routers.predict import (
     translate_premises_to_fol,
     translate_questions_to_fol,
-    verify_with_z3,
-    generate_answer,
-    get_premise_indices,
-    generate_explanation
+    verify_with_z3
 )
 
 # === CONFIG ===
@@ -47,17 +44,11 @@ def query(input_request: InputRequest, authorization: str = Depends(api_key_head
     idx_list = []
     explanations = []
 
-    # Step 2: Solve each question
-    for i, question_fol in enumerate(questions_fol):
-        z3_result = verify_with_z3(premises_fol, question_fol)
-        answer = generate_answer(z3_result)
-        idx = get_premise_indices(input_request.premises_NL, input_request.questions[i])
-        explanation = generate_explanation(input_request.premises_NL, idx)
-
-        answers.append(answer)
-        idx_list.append(idx)
-        explanations.append(explanation)
-
+    # Step 2: Verify with Z3
+    result = verify_with_z3(premises_fol, questions_fol)
+    answers = result[0]
+    idx_list = result[1]
+    
     # Step 3: Return result
     return OutputResponse(
         answers=answers,
