@@ -8,8 +8,8 @@ import os
 # ==== Configuration path ====
 
 base_model_path = "microsoft/Phi-3-mini-4k-instruct"  
-lora_adapter_path = "./models/local-phi3-mini-yoda-adapter"  
-merged_output_path = "./models/phi3-mini-yoda-merged"
+lora_adapter_path = "./models/local-phi3-11k-adapter"  
+merged_output_path = "./models/phi3-mini-11k-merged"
 
 # ==== Load base model + tokenizer ====
 
