@@ -9,7 +9,7 @@ from z3 import *
 from routers.ParserAndSolver import (
     FOLLarkParser, FOLTransformer, EnhancedFOLChecker
 )
-model_path = "./models/phi3-mini-yoda-merged"
+model_path = "./models/phi3-mini-11k-merged"
 
 
 model = AutoModelForCausalLM.from_pretrained(
